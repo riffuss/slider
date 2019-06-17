@@ -1,0 +1,41 @@
+.btns-wrap{
+    position: relative;
+    height: auto;
+}
+.slider{
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    max-width: 500px;
+    height: 100%;
+    margin: 50px auto;
+    overflow: hidden;
+    border: 2px solid #ccc;
+}
+.slider-track{
+    display: flex;
+    flex-shrink: 0;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 500%;
+    height: auto;
+    /* height: 340px; */
+    transition: transform 0.3s ease-out;
+}
+.slider-img{
+    max-width: 20%;
+    display: block;
+}
+
+.slider-prev,
+.slider-next{
+    position: absolute;
+    top: 50%;
+}
+.slider-prev{
+    left: -50px;
+}
+.slider-next{
+    right: -50px;
+}
+
