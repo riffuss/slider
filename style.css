@@ -26,7 +26,17 @@
     max-width: 20%;
     display: block;
 }
-
+.slider-thumb{
+    margin: 0 auto;
+    overflow: hidden;
+}
+.slider-thumb-track{
+    display: flex;
+    transition: transform 0.3s ease-out;
+}
+.slider-thumb-img{
+    /* flex: 0 0 auto; */
+}
 .slider-prev,
 .slider-next{
     position: absolute;
