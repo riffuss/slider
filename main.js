@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function(){
                     ],
         items = [],
         slideW = slides[0].clientWidth,
+        thumbW = slideW / 3,
         startX = 0,
         isDown = false,
         isUp = false,
@@ -32,176 +33,184 @@ document.addEventListener('DOMContentLoaded', function(){
         });
         console.log(slider.clientWidth)
         thumbSlider.style.width = `${slider.clientWidth}px`;
-        thumbImg.forEach(el => el.style.width = `${thumbSlider.clientWidth / 3}px`);
+        thumbTrack.style.width = `${thumbW * (thumbImg.length )}px`
+        thumbImg.forEach((el, i) => {
+            el.style.width = `${thumbW}px`;
+        });
+        console.log(thumbTrack.clientWidth)
     }
     slider_track.addEventListener('transitionend', function(){
         if(direct === -1){
             slider_track.appendChild(slider_track.firstElementChild);
-            thumbTrack.appendChild(thumbTrack.firstElementChild);
         }else if(direct === 1){
             slider_track.prepend(slider_track.lastElementChild);
-            thumbTrack.prepend(thumbTrack.lastElementChild);
         }
-        
         slider_track.style.transition = 'none';
-        thumbTrack.style.transition = 'none';
         slider_track.style.transform = `translateX(0)`;
-        thumbTrack.style.transform = `translateX(0)`;
         setTimeout(()=>{
             slider_track.style.transition = 'transform 0.3s ease-out';
-            thumbTrack.style.transition = 'transform 0.3s ease-out';
         }, 0)
     });
-
-    // Touch events
-    slider_track.addEventListener('touchstart', (e) => {
-        isDown = true;
-        isUp = false;
-        startX = e.changedTouches[0].pageX;
-        slider_track.style.transition = 'none';
-    });
-    slider_track.addEventListener('touchend', () => {
-        isUp = true;
-        isDown = false;
-        if(offset < 0){
-            slider_track.style.transition = 'transform 0.3s ease-out';
-            left();
-        }else{
-            slider_track.style.transition = 'transform 0.3s ease-out';
-            right();
+    thumbTrack.addEventListener('transitionend', function(){
+        if(direct === -1){
+            thumbTrack.appendChild(thumbTrack.firstElementChild);
+            thumbTrack.style.transition = 'none';
+            thumbTrack.style.transform = `translateX(0)`;
         }
-    });
-    slider_track.addEventListener('touchleave', (e) => {
-        isDown = false;
-        if(!isUp){
-            slider_track.style.transition = 'transform 0.3s ease-out';
-            if(offset < 0){
-                slider_track.style.transform = `translateX(-${slideW}px)`;
-            }else{
-                slider_track.style.transform = `translateX(${slideW}px)`;
-            }
-        }   
-    });
-    slider_track.addEventListener('touchmove', (e) => {
-        if(!isDown) return;
-        e.preventDefault();
-        offset = e.changedTouches[0].pageX - startX;
-        offset < 0 ? left() : right();
-        slider_track.style.transform = `translateX(${offset}px)`;
-    });
-
-    // Mouse Events
-    slider_track.addEventListener('mousedown', (e) => {
-        isDown = true;
-        isUp = false;
-        startX = e.pageX;
-        slider_track.style.transition = 'none';
-        thumbTrack.style.transition = 'none';
-    });
-    slider_track.addEventListener('mouseup', () => {
-        isUp = true;
-        isDown = false;
-        if(offset < 0){
-            slider_track.style.transition = 'transform 0.3s ease-out';
-            thumbTrack.style.transition = 'transform 0.3s ease-out';
-            left();
-        }else{
-            slider_track.style.transition = 'transform 0.3s ease-out';
-            thumbTrack.style.transition = 'transform 0.3s ease-out';
-            right();
-        }
-    });
-    slider_track.addEventListener('mouseleave', (e) => {
-        isDown = false;
-        if(!isUp){
-            isUp = true;
-            slider_track.style.transition = 'transform 0.3s ease-out';
-            thumbTrack.style.transition = 'transform 0.3s ease-out';
-            if(offset < 0){
-                slider_track.style.transform = `translateX(-${slideW}px)`;
-                thumbTrack.style.transform = `translateX(-${slideW}px)`;
-            }else{
-                slider_track.style.transform = `translateX(${slideW}px)`;
-                thumbTrack.style.transform = `translateX(${slideW}px)`;
-            }
-        }   
-    });
-    slider_track.addEventListener('mousemove', (e) => {
-        if(!isDown) return;
-        e.preventDefault();
-        offset = e.pageX - startX;
-        offset < 0 ? left() : right();
-        slider_track.style.transform = `translateX(${offset}px)`;
-        thumbTrack.style.transform = `translateX(${offset/3}px)`;
-    });
-
-    thumbTrack.addEventListener('mousedown', (e) => {
-        isDown = true;
-        isUp = false;
-        startX = e.pageX;
-        slider_track.style.transition = 'none';
-        thumbTrack.style.transition = 'none';
-    });
-    thumbTrack.addEventListener('mouseup', () => {
-        isUp = true;
-        isDown = false;
-        if(offset < 0){
-            slider_track.style.transition = 'transform 0.3s ease-out';
-            thumbTrack.style.transition = 'transform 0.3s ease-out';
-            left();
-        }else{
-            slider_track.style.transition = 'transform 0.3s ease-out';
-            thumbTrack.style.transition = 'transform 0.3s ease-out';
-            right();
-        }
-    });
-    thumbTrack.addEventListener('mouseleave', (e) => {
-        isDown = false;
-        if(!isUp){
-            isUp = true;
-            slider_track.style.transition = 'transform 0.3s ease-out';
-            thumbTrack.style.transition = 'transform 0.3s ease-out';
-            if(offset < 0){
-                slider_track.style.transform = `translateX(-${slideW}px)`;
-                thumbTrack.style.transform = `translateX(-${slideW}px)`;
-            }else{
-                slider_track.style.transform = `translateX(${slideW}px)`;
-                thumbTrack.style.transform = `translateX(${slideW}px)`;
-            }
-        }   
-    });
-    thumbTrack.addEventListener('mousemove', (e) => {
-        if(!isDown) return;
-        e.preventDefault();
-        offset = e.pageX - startX;
-        offset < 0 ? left() : right();
-        slider_track.style.transform = `translateX(${offset}px)`;
-        thumbTrack.style.transform = `translateX(${offset/3}px)`;
     });
     function left(){
         if(direct === 1){
             slider_track.prepend(slider_track.lastElementChild);
-            thumbTrack.prepend(thumbTrack.lastElementChild);
         }
         direct = -1;
         slider.style.justifyContent = 'flex-start';
-        thumbSlider.style.justifyContent = 'flex-start';
-        index++;
         slider_track.style.transform = `translateX(-${slideW}px)`;
-        thumbTrack.style.transform = `translateX(-${slideW/3}px)`;
+        index++;
+        thumbTrack.style.transition = 'transform 0.3s ease-out';
+        thumbTrack.style.transform = `translateX(-${thumbW}px)`;
     }
     function right(){
         if(direct === -1){
             slider_track.appendChild(slider_track.firstElementChild);
-            thumbTrack.appendChild(thumbTrack.firstElementChild);
         }
         direct = 1;
         slider.style.justifyContent = 'flex-end';
-        thumbSlider.style.justifyContent = 'flex-end';
         index--;
         slider_track.style.transform = `translateX(${slideW}px)`;
-        thumbTrack.style.transform = `translateX(${slideW/3}px)`;
+        thumbTrack.prepend(thumbTrack.lastElementChild);
+        thumbTrack.style.transition = 'none';
+        thumbTrack.style.transform = `translateX(-${slideW/3}px)`;
+        setTimeout(()=>{
+            thumbTrack.style.transition = 'transform 0.3s ease-out';
+            thumbTrack.style.transform = `translateX(0)`;
+        });
     }
     prev.addEventListener('click', left);
     next.addEventListener('click', right);
+    // Touch events
+    // slider_track.addEventListener('touchstart', (e) => {
+    //     isDown = true;
+    //     isUp = false;
+    //     startX = e.changedTouches[0].pageX;
+    //     slider_track.style.transition = 'none';
+    // });
+    // slider_track.addEventListener('touchend', () => {
+    //     isUp = true;
+    //     isDown = false;
+    //     if(offset < 0){
+    //         slider_track.style.transition = 'transform 0.3s ease-out';
+    //         left();
+    //     }else{
+    //         slider_track.style.transition = 'transform 0.3s ease-out';
+    //         right();
+    //     }
+    // });
+    // slider_track.addEventListener('touchleave', (e) => {
+    //     isDown = false;
+    //     if(!isUp){
+    //         slider_track.style.transition = 'transform 0.3s ease-out';
+    //         if(offset < 0){
+    //             slider_track.style.transform = `translateX(-${slideW}px)`;
+    //         }else{
+    //             slider_track.style.transform = `translateX(${slideW}px)`;
+    //         }
+    //     }
+    // });
+    // slider_track.addEventListener('touchmove', (e) => {
+    //     if(!isDown) return;
+    //     e.preventDefault();
+    //     offset = e.changedTouches[0].pageX - startX;
+    //     offset < 0 ? left() : right();
+    //     slider_track.style.transform = `translateX(${offset}px)`;
+    // });
+
+    // Mouse Events
+    // slider_track.addEventListener('mousedown', (e) => {
+    //     isDown = true;
+    //     isUp = false;
+    //     startX = e.pageX;
+    //     slider_track.style.transition = 'none';
+    //     thumbTrack.style.transition = 'none';
+    // });
+    // slider_track.addEventListener('mouseup', () => {
+    //     isUp = true;
+    //     isDown = false;
+    //     if(offset < 0){
+    //         slider_track.style.transition = 'transform 0.3s ease-out';
+    //         thumbTrack.style.transition = 'transform 0.3s ease-out';
+    //         left();
+    //     }else{
+    //         slider_track.style.transition = 'transform 0.3s ease-out';
+    //         thumbTrack.style.transition = 'transform 0.3s ease-out';
+    //         right();
+    //     }
+    // });
+    // slider_track.addEventListener('mouseleave', (e) => {
+    //     isDown = false;
+    //     if(!isUp){
+    //         isUp = true;
+    //         slider_track.style.transition = 'transform 0.3s ease-out';
+    //         thumbTrack.style.transition = 'transform 0.3s ease-out';
+    //         if(offset < 0){
+    //             slider_track.style.transform = `translateX(-${slideW}px)`;
+    //             thumbTrack.style.transform = `translateX(-${slideW}px)`;
+    //         }else{
+    //             slider_track.style.transform = `translateX(${slideW}px)`;
+    //             thumbTrack.style.transform = `translateX(${slideW}px)`;
+    //         }
+    //     }
+    // });
+    // slider_track.addEventListener('mousemove', (e) => {
+    //     if(!isDown) return;
+    //     e.preventDefault();
+    //     offset = e.pageX - startX;
+    //     offset < 0 ? left() : right();
+    //     slider_track.style.transform = `translateX(${offset}px)`;
+    //     thumbTrack.style.transform = `translateX(${offset/3}px)`;
+    // });
+    //
+    // thumbTrack.addEventListener('mousedown', (e) => {
+    //     isDown = true;
+    //     isUp = false;
+    //     startX = e.pageX;
+    //     slider_track.style.transition = 'none';
+    //     thumbTrack.style.transition = 'none';
+    // });
+    // thumbTrack.addEventListener('mouseup', () => {
+    //     isUp = true;
+    //     isDown = false;
+    //     if(offset < 0){
+    //         slider_track.style.transition = 'transform 0.3s ease-out';
+    //         thumbTrack.style.transition = 'transform 0.3s ease-out';
+    //         left();
+    //     }else{
+    //         slider_track.style.transition = 'transform 0.3s ease-out';
+    //         thumbTrack.style.transition = 'transform 0.3s ease-out';
+    //         right();
+    //     }
+    // });
+    // thumbTrack.addEventListener('mouseleave', (e) => {
+    //     isDown = false;
+    //     if(!isUp){
+    //         isUp = true;
+    //         slider_track.style.transition = 'transform 0.3s ease-out';
+    //         thumbTrack.style.transition = 'transform 0.3s ease-out';
+    //         if(offset < 0){
+    //             slider_track.style.transform = `translateX(-${slideW}px)`;
+    //             thumbTrack.style.transform = `translateX(-${slideW}px)`;
+    //         }else{
+    //             slider_track.style.transform = `translateX(${slideW}px)`;
+    //             thumbTrack.style.transform = `translateX(${slideW}px)`;
+    //         }
+    //     }
+    // });
+    // thumbTrack.addEventListener('mousemove', (e) => {
+    //     if(!isDown) return;
+    //     e.preventDefault();
+    //     offset = e.pageX - startX;
+    //     offset < 0 ? left() : right();
+    //     slider_track.style.transform = `translateX(${offset}px)`;
+    //     thumbTrack.style.transform = `translateX(${offset/3}px)`;
+    // });
+
 });
